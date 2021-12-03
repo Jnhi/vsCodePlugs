@@ -1,10 +1,14 @@
 
 import { Hover,languages,ExtensionContext,commands,StatusBarItem,window,StatusBarAlignment,workspace } from 'vscode';
 
-
+/**
+ * 下方状态栏类
+*/
 export class DownStateBar {
-	//定义一个状态栏的属性
     private _statusBar : StatusBarItem | undefined;
+    /**
+     * 状态栏对象
+     */
     constructor() {
         if (!this._statusBar) {
             this._statusBar = window.createStatusBarItem(StatusBarAlignment.Left);
@@ -17,7 +21,10 @@ export class DownStateBar {
         // 当活动编辑器 发生更改时将触发的事件
         window.onDidChangeActiveTextEditor(this.updateWordCount, this);
     }
-
+    
+    /**
+     * 更新字数
+     */
     public updateWordCount() {
 
         if (!this._statusBar) {
@@ -45,7 +52,9 @@ export class DownStateBar {
         }
     }
 
-    // 销毁对象和自由资源
+    /**
+     * 销毁对象
+     */
     dispose() {
         if (this._statusBar) {
             this._statusBar.dispose();

@@ -1,9 +1,24 @@
-# Change Log
+# Info
 
-All notable changes to the "helloworld" extension will be documented in this file.
+一个例子 包含装饰器 悬停提示 状态栏文本
 
-Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
-
-## [Unreleased]
-
-- Initial release
+//                  _oo0oo_
+//                 o8888888o
+//                 88" . "88
+//                 (| -_- |)
+//                 0\  =  /0
+//               ___/`---'\___
+//             .' \\|     |// '.
+//            / \\|||  :  |||// \
+//           / _||||| -:- |||||- \ 
+//          |   | \\\  -  /// |   |
+//          | \_|  ''\---/''  |_/ |
+//          \  .-\__  '-'  ___/-. /
+//        ___'. .'  /--.--\  `. .'___
+//     ."" '<  `.___\_<|>_/___.' >' "".
+//    | | :  `- \`.;`\ _ /`;.`/ - ` : | |
+//    \  \ `_.   \_ __\ /__ _/   .-` /  /
+//=====`-.____`.___ \_____/___.-`___.-'=====
+//                  `=---='
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+//        佛祖保佑         永无BUG

@@ -1,13 +1,10 @@
-
-import * as fs from 'fs';
-import * as readline from 'readline';
 import * as vscode from 'vscode';
+import { locLangDic } from './extension';
 
 /**
  * 文本装饰类
  */
 export class Decoration {
-    private langDic : Map<string,string> | undefined;
     private smallNumberDecorationType = vscode.window.createTextEditorDecorationType({
 
         before: {
@@ -29,9 +26,10 @@ export class Decoration {
         // }
     });
     constructor(context: vscode.ExtensionContext) {
-        // 更新本地化文本
-        this.updateLangData()
+        console.log("装饰器1");
         this.refreshDecoration();
+        console.log("装饰器2");
+
         // vscode.window.onDidChangeTextEditorSelection(editor => {
         //     vscode.window.activeTextEditor = editor;
         //     if (editor) {
@@ -42,6 +40,7 @@ export class Decoration {
         vscode.window.onDidChangeTextEditorSelection(event => {
             this.refreshDecoration()
         },this);
+        console.log("装饰器3");
     
         vscode.workspace.onDidChangeTextDocument(event => {
             if (vscode.window.activeTextEditor && event.document === vscode.window.activeTextEditor.document) {
@@ -60,108 +59,57 @@ export class Decoration {
         if (!activeEditor) {
             return;
         }
-        if (!this.langDic) {
+        if (!locLangDic) {
             return;
         }
+        console.log("装饰器4");
+
         //加了问号是非贪婪模式
         const regEx = /G_lang\(\"(.+?)\"/g;
         const text = activeEditor.document.getText();
         const smallNumbers: vscode.DecorationOptions[] = [];
         let match;
+        console.log("装饰器5");
 
         while ((match = regEx.exec(text))) {
-            var res = this.langDic.get(match[1])
-            // console.log(" res : ",res,"key:",match[1]);
+            // console.log("装饰器6",match);
+            var res = locLangDic.get(match[1])
+            console.log(" res : ",res,"key:",match[1]);
             var startPos = activeEditor.document.positionAt(match.index+8);
             var endPos = activeEditor.document.positionAt(match.index+8 + match[0].length);
+            var decoration
 
-            var decoration = { 
-                range: new vscode.Range(startPos, endPos), 
-                hoverMessage: res,
-                renderOptions:{
-                    before: {
-                        "contentText":res,
-                        "backgroundColor":"#7F7F7F11",
-                        "color":"#D8D8D8FF",
-                        // "fontWeight":"18",
-                    }, 
-                }
-            }
-            if (!res){
+            if (res){
+                var tip:string = res[0]
                 decoration = { 
-                range: new vscode.Range(startPos, endPos), 
-                hoverMessage: " Undefined ",
-                renderOptions:{
-                    before: {
-                        "contentText":" Undefined ",
-                        "backgroundColor":"#7F7F7F11",
-                        "color":"#FF0000FF",
-                        // "fontWeight":"18",
-                    }, 
+                    range: new vscode.Range(startPos, endPos), 
+                    hoverMessage: tip,
+                    renderOptions:{
+                        before: {
+                            "contentText":tip,
+                            "backgroundColor":"#7F7F7F11",
+                            "color":"#D8D8D8FF",
+                            // "fontWeight":"18",
+                        }, 
+                    }
+                }
+            }else{
+                decoration = { 
+                    range: new vscode.Range(startPos, endPos), 
+                    hoverMessage: " Undefined ",
+                    renderOptions:{
+                        before: {
+                            "contentText":" Undefined ",
+                            "backgroundColor":"#7F7F7F11",
+                            "color":"#FF0000FF",
+                            // "fontWeight":"18",
+                        }, 
+                    }
                 }
             }
-            }
-
             smallNumbers.push(decoration);
         }
         activeEditor.setDecorations(this.smallNumberDecorationType, smallNumbers);
 
     }
-
-    /**
-     * 更新语言文件Map
-     */
-    public updateLangData(){
-        vscode.window.showInformationMessage('开始更新语言文件Map')
-        if (this.langDic) {
-            this.langDic.clear()
-        }else{
-            this.langDic = new Map()
-        }
-        var locPath = ""
-        if (vscode.workspace.workspaceFolders) {
-            const rootPath: string = vscode.workspace.workspaceFolders[0].uri.fsPath;
-            console.log(vscode.workspace.workspaceFolders[0].uri.fsPath);
-    
-            var cocosIndex = rootPath.indexOf("cocosstudio")
-            locPath = vscode.workspace.workspaceFolders[0].uri.fsPath + "\\language\\localText.lua";
-            if(cocosIndex == -1){
-                locPath = vscode.workspace.workspaceFolders[0].uri.fsPath + "\\cocosstudio\\language\\localText.lua";
-            }
-        }
-    
-        fs.stat(locPath, (err, stats) => {
-            if (err != null) { 
-                console.log(" err : " + err);
-                return
-            }
-            var fRead = fs.createReadStream(locPath);
-            var objReadline = readline.createInterface({
-                input:fRead
-            });
-            objReadline.on('line', (line) => {
-                
-                // console.log("line|"+line);
-                var key = line.match(/\[\"(.+)\"\]/);
-                //x(?!y)称为先行否定断言（Negative look-ahead），x只有不在y前面才匹配，y不会被计入返回结果
-                var value = line.match(/[= ]\"(.+)\"+/);
-                console.log("line2|"+line);
-                if (key) {
-                    console.log("key:",key[1]);
-                }
-                if (value) {
-                    console.log("value:"+"|"+value[1]);
-                }
-                if (key && value) {
-                    if (this.langDic) {
-                        // console.log("key:",key[1]);
-                        // console.log("value:",value[1]);
-                        this.langDic.set(key[1], value[1]);
-                    }
-                }
-            });
-        });
-        vscode.window.showInformationMessage('更新语言文件Map成功')
-    }
-
 }

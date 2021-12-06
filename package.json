@@ -3,7 +3,7 @@
   "displayName": "极品芝麻官",
   "description": "无限进步！",
   "publisher": "Jnhi",
-  "version": "0.0.5",
+  "version": "0.0.7",
   "engines": {
     "vscode": "^1.61.0"
   },
@@ -38,6 +38,16 @@
         "path": "./theme/product-icon-theme.json"
       }
     ],
+    "configuration": {
+			"title": "ClientTool配置",
+			"properties": {
+				"jnhi-plugin.regExp": {
+					"type": "string",
+					"default": "G_lang('$1')",
+					"description": "多语言匹配格式,$1为匹配符,必须存在"
+				}
+			}
+		},
     "commands": [
       {
         "command": "extension.updataLang",

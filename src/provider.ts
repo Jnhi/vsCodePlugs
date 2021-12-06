@@ -1,60 +1,81 @@
-import { languages,ExtensionContext,workspace, CompletionItem, CompletionItemKind } from 'vscode';
-
+import * as vscode from 'vscode';
+import { getRegExp } from './utils/utils';
+import Conf from './conf';
+import { locLangDic } from './extension';
+    // "configuration": {
+		// 	"title": "ClientTool配置",
+		// 	"properties": {
+		// 		"jnhi-plugin.regExp": {
+		// 			"type": "string",
+		// 			"default": "G_lang('$1')",
+		// 			"description": "多语言匹配格式,$1为匹配符,必须存在"
+		// 		}
+		// 	}
+		// },
 export class Provider {
     /**
      * 自动提示类
      * @param {*} context ExtensionContext
      */
-    constructor(context: ExtensionContext) {
-        /**
-         * 自动提示实现，这里模拟一个很简单的操作
-         * 当输入 this.dependencies.xxx时自动把package.json中的依赖带出来
-         * 当然这个例子没啥实际意义，仅仅是为了演示如何实现功能
-         * @param {*} document 
-         * @param {*} position 
-         * @param {*} token 
-         * @param {*} context 
-         */
-        function provideCompletionItems(document: { lineAt: (arg0: any) => any; }, position: { character: any; }, token: any, context: any) {
-            const line = document.lineAt(position);
-            var locPath = ""
-            if (workspace.workspaceFolders) {
-                const rootPath: string = workspace.workspaceFolders[0].name;
-                console.log(workspace.workspaceFolders[0].name);
-    
-                var cocosIndex = rootPath.indexOf("cocosstudio")
-                locPath = workspace.workspaceFolders + "\\language\\localText.lua";
-                if(cocosIndex == -1){
-                    locPath = workspace.workspaceFolders + "\\cocosstudio\\language\\localText.lua";
-                }
+    constructor(context: vscode.ExtensionContext) {
+        // 注册i18n代码补全
+        var registerCompletionProvider = vscode.languages.registerCompletionItemProvider(
+            { scheme: 'file', language: 'lua' },
+            this.variableCompletionItemProvider,
+            ...[`"`, `'`, `G_lang("")`,`G_lang('')`]
+        );
+        context.subscriptions.push(registerCompletionProvider);
+        console.log("注册代码补全");
+    }
+    /**
+    * 自定义提示
+    * @param {*} context ExtensionContext
+    */
+    private variableCompletionItemProvider = <vscode.CompletionItemProvider>{
+
+        provideCompletionItems:(document,position) => {
+
+            // 匹配当前行内容
+            const lineText = document.lineAt(position).text;
+            const linePrefix = lineText.substr(0, position.character+1);
+            console.log("linePrefix:",linePrefix);
+            console.log("Conf.regExp:",Conf.regExp);
+        
+            let regExpObj = getRegExp(Conf.regExp);
+            console.log("regExpObj:",regExpObj);
+
+            if(!regExpObj) {return;};
+            regExpObj=regExpObj.replace(/\(\[\\w-\]\+\)/,'');
+            console.log("regExpObj:",regExpObj);
+            if(!regExpObj) {return;};
+            if(!(new RegExp(regExpObj).test(linePrefix))){
+              return undefined;
             }
         
-            // 只截取到光标位置为止，防止一些特殊情况
-            const lineText = line.text.substring(0, position.character);
-            // 简单匹配，只要当前光标前的字符串为`this.dependencies.`都自动带出所有的依赖
-            if(/(^|=| )w+G_lang\("$/g.test(lineText)) {
-            const json = require(`${locPath}/package.json`);
-            const dependencies = Object.keys(json.dependencies || {}).concat(Object.keys(json.devDependencies || {}));
-            return dependencies.map(dep => {
-            // vscode.CompletionItemKind 表示提示的类型
-            return new CompletionItem(dep, CompletionItemKind.Field);
+            // // 获取所有key值提示
+            // if(!Dictionary) {return;}; 
+            // const result = getLocalesKeys(document,Dictionary);
+            // if(!result) {return;};
+            // console.log("langDic:",this.langDic.keys());
+            console.log("linePrefix2:",linePrefix);
+            
+            const result: vscode.ProviderResult<vscode.CompletionItem[] | vscode.CompletionList<vscode.CompletionItem>> = []
+
+            locLangDic.forEach((value, key) => { 
+                result.push(new vscode.CompletionItem(key, vscode.CompletionItemKind.Variable))
             })
-            }
-        }
-        /**
-         * 光标选中当前自动补全item时触发动作，一般情况下无需处理
-         * @param {*} item 
-         * @param {*} token 
-         */
-        function resolveCompletionItem(item: any, token: any) {
+            // result.push
+            // Object.keys(this.langDic.keys()).map(item=>{
+            //     console.log("Map:",item);
+            //     return new vscode.CompletionItem(item, vscode.CompletionItemKind.Variable);
+            //   });
+            return result; 
+        },
+        resolveCompletionItem() {
+            console.log("resolveCompletionItem");
             return null;
         }
+    }
 
-        // 注册代码建议提示，只有当按下“.”时才触发
-        context.subscriptions.push(languages.registerCompletionItemProvider("lua", {
-            provideCompletionItems,
-            resolveCompletionItem
-            }));
-        }
 
 }

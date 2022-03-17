@@ -3,9 +3,9 @@
   "displayName": "极品芝麻官",
   "description": "无限进步！",
   "publisher": "Jnhi",
-  "version": "0.0.7",
+  "version": "0.1.1",
   "engines": {
-    "vscode": "^1.61.0"
+    "vscode": "^1.56.0"
   },
   "categories": [
     "Other"
@@ -39,28 +39,50 @@
       }
     ],
     "configuration": {
-			"title": "ClientTool配置",
-			"properties": {
-				"jnhi-plugin.regExp": {
-					"type": "string",
-					"default": "G_lang('$1')",
-					"description": "多语言匹配格式,$1为匹配符,必须存在"
-				}
-			}
-		},
+      "title": "ClientTool配置",
+      "properties": {
+        "jnhi-plugin.regExp": {
+          "type": "string",
+          "default": "G_lang('$1')",
+          "description": "多语言匹配格式,$1为匹配符,必须存在"
+        },
+        "jnhi-plugin.locLangExp": {
+          "type": "string",
+          "default": "language",
+          "description": "多语言文本目录匹配字符串"
+        }
+      }
+    },
     "commands": [
       {
         "command": "extension.updataLang",
-        "title": "updataLang"
+        "title": "更新多语言字典"
+      },
+      {
+        "command": "extension.changeText",
+        "title": "替换文本"
       }
-    ]
+    ],
+    "menus": {
+      "editor/context": [
+        {
+          "when": "editorHasSelection",
+          "command": "extension.changeText",
+          "group": "navigation"
+        },
+        {
+          "when": "editorHasSelection",
+          "command": "extension.updataLang",
+          "group": "navigation"
+        }
+      ]
+    }
   },
-  
   "devDependencies": {
     "@types/glob": "^7.1.4",
     "@types/mocha": "^9.0.0",
     "@types/node": "14.x",
-    "@types/vscode": "^1.61.0",
+    "@types/vscode": "^1.56.0",
     "@typescript-eslint/eslint-plugin": "^5.1.0",
     "@typescript-eslint/parser": "^5.1.0",
     "@vscode/test-electron": "^1.6.2",
@@ -82,7 +104,6 @@
     "packagename": "^2.0.1",
     "path": "^0.12.7",
     "readline": "^1.3.0",
-    "tsc": "^2.0.3",
-    "yo": "^2.0.2"
+    "tsc": "^2.0.3"
   }
 }

@@ -56,7 +56,6 @@ export class HoverTip {
         //     { scheme: "file" },
         //     codelenprovider
         // );
-
     }
 
     /**
@@ -64,8 +63,9 @@ export class HoverTip {
      * @param {*} context ExtensionContext
      */
     private variableHoverProvider = <vscode.HoverProvider>{
-        // this is for getting the values on hover over context variables and shortcuts
+
         provideHover: (document, position, token) => {
+            console.log("进来了provideHover");
             var tips = "无语言Map"
             if (locLangDic == null) {
                 return new vscode.Hover(tips);

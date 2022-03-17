@@ -1,15 +1,9 @@
 import * as vscode from 'vscode';
-// import { parse } from "recast";
-// import {TDictionary} from '../Dictionary';
 import {TConf} from '../conf';
 
 const Uri = vscode.Uri;
-const CompletionItem = vscode.CompletionItem;
-const CompletionItemKind = vscode.CompletionItemKind;
 const Location = vscode.Location;
 const Position = vscode.Position;
-const fs = vscode.workspace.fs;
-const MarkdownString = vscode.MarkdownString;
 
 /** 返回多语言位置 */
 export async function getWordLocation(key:string,document:vscode.TextDocument,locLangDic:Map<any,any>,conf:TConf){
@@ -28,7 +22,7 @@ export async function getWordLocation(key:string,document:vscode.TextDocument,lo
         var uri =Uri.file(res[4])
         // console.log("uri:",uri);
         re.push(
-          new Location(Uri.file(res[4]), new Position(Number(res[1]), Number(res[2])))
+          new Location(Uri.file(res[4]), new Position(Number(res[1])-1, Number(res[2])))
         );
       }
     // }

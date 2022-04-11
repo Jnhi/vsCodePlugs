@@ -39,7 +39,7 @@ export class TextMatch {
                 editBuilder.replace(new vscode.Range(startPos, endPos),'G_lang("' + res +'")')
             })
         } else {
-            vscode.window.showInformationMessage(`找不到需要文本😬`);
+            vscode.window.showInformationMessage(`找不到😬已经自动生成对应文本`);
             // fs.promises.writeFile(locPath, finalLangContent,{ 'flag': 'a' });
             // var outView = vscode.window.createOutputChannel("文本")
             // outView.appendLine('["'+currentEditor.document.fileName+'"] = "' + currentSelect + '"')
@@ -47,17 +47,14 @@ export class TextMatch {
 
             const edit = new vscode.WorkspaceEdit();
             // const edit = vscode.workspace.openTextDocument
-            var uu = vscode.Uri.file(locPath)
-            console.log(locPath)
-            console.log(uu)
-            
             var key = path.parse(currentEditor.document.fileName).name
             edit.insert(
-                uu,
+                vscode.Uri.file(locPath),
                 new vscode.Position(8,0),
-                '\t["'+ key + '_' + currentEditor.selection.anchor.line +'_'+ currentEditor.selection.anchor.character +'"] = "' + currentSelect + '",'
+                '\n\t["'+ key + '_' + currentEditor.selection.anchor.line +'_'+ currentEditor.selection.anchor.character +'"] = "' + currentSelect + '",'
             );
-            vscode.workspace.applyEdit(edit)
+
+            vscode.workspace.saveAll(false)
         }
     }
 }

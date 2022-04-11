@@ -3,7 +3,7 @@
   "displayName": "极品芝麻官",
   "description": "无限进步！",
   "publisher": "Jnhi",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "engines": {
     "vscode": "^1.56.0"
   },
@@ -34,7 +34,7 @@
     "productIconThemes": [
       {
         "id": "vscode-v1-icons",
-        "label": "阿巴阿巴阿巴",
+        "label": "没啥卵用",
         "path": "./theme/product-icon-theme.json"
       }
     ],

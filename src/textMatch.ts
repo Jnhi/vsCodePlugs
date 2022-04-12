@@ -17,7 +17,7 @@ export class TextMatch {
         //选择的字符串
         const currentSelect = currentEditor.document.getText(currentEditor.selection)
         if (!currentSelect) return
-        // console.log("选择的字符串："+currentSelect)
+        console.log("选择的字符串："+currentSelect)
         
         // currentEditor.selection.start.character
         //currentEditor.selection
@@ -30,7 +30,6 @@ export class TextMatch {
         // console.log("startIndex:"+startIndex)
         // console.log("endPos:"+endIndex)
         
-        startPos.translate
 
         
         var res = locLangDicValue_Key.get(currentSelect)
@@ -48,13 +47,15 @@ export class TextMatch {
             const edit = new vscode.WorkspaceEdit();
             // const edit = vscode.workspace.openTextDocument
             var key = path.parse(currentEditor.document.fileName).name
+            console.log(key,vscode.Uri.file(locPath))
             edit.insert(
                 vscode.Uri.file(locPath),
                 new vscode.Position(8,0),
                 '\n\t["'+ key + '_' + currentEditor.selection.anchor.line +'_'+ currentEditor.selection.anchor.character +'"] = "' + currentSelect + '",'
             );
-
+            vscode.workspace.applyEdit(edit)
             vscode.workspace.saveAll(false)
+
         }
     }
 }

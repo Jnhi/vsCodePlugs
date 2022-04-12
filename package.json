@@ -1,9 +1,9 @@
 {
   "name": "jnhi-plugin",
-  "displayName": "极品芝麻官",
+  "displayName": "多语言工具",
   "description": "无限进步！",
   "publisher": "Jnhi",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "engines": {
     "vscode": "^1.56.0"
   },
@@ -101,7 +101,6 @@
     "cnpm": "^7.1.0",
     "fs": "^0.0.1-security",
     "generator-code": "^1.6.4",
-    "packagename": "^2.0.1",
     "path": "^0.12.7",
     "readline": "^1.3.0",
     "tsc": "^2.0.3"

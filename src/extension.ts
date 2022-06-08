@@ -1,8 +1,8 @@
 import { once } from 'events';
-import * as fs from 'fs';
 import path = require('path');
 import * as readline from 'readline';
 import * as vscode from 'vscode';
+import * as fs from 'fs';
 import Conf from './conf';
 import { Decoration } from './decoration';
 import { Definition } from './definition';

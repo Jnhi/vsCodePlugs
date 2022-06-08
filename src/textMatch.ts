@@ -15,11 +15,21 @@ export class TextMatch {
         const currentEditor = vscode.window.activeTextEditor;
         if (!currentEditor) {return;};
         //选择的字符串
-        const currentSelect = currentEditor.document.getText(currentEditor.selection);
-        if (!currentSelect) {return;};
+        const currentSelect = currentEditor.document.getText(currentEditor.selection)
+        if (!currentSelect) return
+        console.log("选择的字符串："+currentSelect)
+        
+        // currentEditor.selection.start.character
+        //currentEditor.selection
+        
+        // var startIndex = currentEditor.selection.start.character - 1
+        // var endIndex = currentEditor.selection.end.character + 1
 
-        var startPos = currentEditor.selection.start.translate(undefined,-1);
-        var endPos = currentEditor.selection.end.translate(undefined,1);
+        var startPos = currentEditor.selection.start.translate(undefined,-1)
+        var endPos = currentEditor.selection.end.translate(undefined,1)
+        // console.log("startIndex:"+startIndex)
+        // console.log("endPos:"+endIndex)
+        
 
 
         vscode.window.showInformationMessage(`😬暂停使用`);

@@ -1,4 +1,4 @@
-## 用来学习TS、VsCode插件编写的Demo 
+## 用来学习TS、VsCode插件编写的Demo 包含以下功能
 
 - 文本跳转
 - 文本提示
